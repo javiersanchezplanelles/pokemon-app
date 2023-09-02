@@ -1,5 +1,5 @@
-import { Searchbar } from "@/domain/searchbar/searchbar.types"
 import React from "react"
+import { Searchbar } from "../../domain/searchbar/searchbar.types"
 
 export const SearchbarComponent = ({
   setSearchbarInput,

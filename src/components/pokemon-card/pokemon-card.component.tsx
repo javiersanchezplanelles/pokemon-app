@@ -1,7 +1,7 @@
 import React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { PokemonCard } from "@/domain/pokemon/pokemon-card.types"
+import { PokemonCard } from "../../domain/pokemon/pokemon-card.types"
 
 export const PokemonCardComponent = ({ pokemon, index }: PokemonCard) => {
   const pokemonIndex = ("000" + (index + 1)).slice(-3)

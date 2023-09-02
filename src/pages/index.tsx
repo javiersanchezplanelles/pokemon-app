@@ -1,9 +1,9 @@
-import Layout from "@/components/layout/layout"
-import { PokemonCardComponent } from "@/components/pokemon-card/pokemon-card.component"
+import Layout from "../components/layout/layout"
+import { PokemonCardComponent } from "../components/pokemon-card/pokemon-card.component"
 import { useState } from "react"
 import { useRouter } from "next/router"
-import { SearchbarComponent } from "@/components/searchbar/searchbar.component"
-import { Pokemon } from "@/domain/pokemon/pokemon.types"
+import { SearchbarComponent } from "../components/searchbar/searchbar.component"
+import { Pokemon } from "../domain/pokemon/pokemon.types"
 
 export default function Home({ pokemonList }) {
   const [pokemons, setPokemons] = useState(pokemonList)
