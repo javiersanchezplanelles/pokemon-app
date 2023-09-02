@@ -1,6 +1,7 @@
 import React from "react"
 import Image from "next/image"
 import Layout from "@/components/layout/layout"
+import Link from "next/link"
 
 const PokemonDetail = ({ pokemon }) => {
   const pokemonIndex = ("000" + pokemon.id).slice(-3)
@@ -23,6 +24,9 @@ const PokemonDetail = ({ pokemon }) => {
 
   return (
     <Layout title={pokemon.name}>
+      <div>
+        <Link href="/">Back</Link>
+      </div>
       <div className="p-10 bg-cyan-950">
         <div className="flex flex-col justify-center items-center">
           <h2>{pokemon.name}</h2>
