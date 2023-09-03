@@ -26,7 +26,7 @@ const PokemonDetail = ({ pokemon }) => {
     <Layout title={pokemon.name}>
       <div>
         <Link className="pb-10 font-medium" href="/">
-          Go back
+          Back
         </Link>
       </div>
       <div className="p-10 bg-cyan-950">
