@@ -6,12 +6,6 @@ import { SearchbarComponent } from "../components/searchbar/searchbar.component"
 import { Pokemon } from "../domain/pokemon/pokemon.types"
 import { FilterModalComponent } from "../components/filter-modal/filter-modal.component"
 interface PokemonResponse {
-  pokemonList: {
-    count: number
-    next: string
-    previous: string
-    results: Pokemon[]
-  }
   pokemonDataList: any
 }
 
@@ -19,6 +13,7 @@ export default function Home({ pokemonDataList }: PokemonResponse) {
   const FIRST_POKEMON_GENERATION_COUNT = 151
   const MAX_PAGE_LIMIT = 20
   const [offset, setOffset] = useState(0)
+  const ORIGINAL_POKEMON_LOAD = pokemonDataList.slice(offset, MAX_PAGE_LIMIT)
   const [searchbarInput, setSearchbarInput] = useState("")
   const router = useRouter()
   const [selectedPokemonType, setSelectedPokemonType] = useState("")
@@ -26,8 +21,9 @@ export default function Home({ pokemonDataList }: PokemonResponse) {
     router.push(`/pokemon-detail/${searchbarInput.toLowerCase()}`)
   }
   const [initialPokemonList, setInitialPokemonList] = useState(
-    pokemonDataList.slice(offset, 20)
+    ORIGINAL_POKEMON_LOAD
   )
+
   const handleLoadMore = () => {
     setInitialPokemonList([
       ...initialPokemonList,
@@ -40,11 +36,14 @@ export default function Home({ pokemonDataList }: PokemonResponse) {
   }, [initialPokemonList])
 
   const handleOnFindModal = () => {
-    const pokemonOfType = pokemonDataList.filter((pokemon) =>
+    const pokemonOfType = pokemonDataList.filter((pokemon: Pokemon) =>
       pokemon.types.some((type) => type.name === selectedPokemonType)
     )
     setInitialPokemonList(pokemonOfType)
   }
+
+  const handleOnClear = () =>
+    setInitialPokemonList(pokemonDataList.slice(0, MAX_PAGE_LIMIT))
 
   return (
     <Layout title={"Pokemon list"}>
@@ -55,6 +54,7 @@ export default function Home({ pokemonDataList }: PokemonResponse) {
       <FilterModalComponent
         setSelectedPokemonType={setSelectedPokemonType}
         onFind={handleOnFindModal}
+        onClear={handleOnClear}
       />
       <section className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5">
         {initialPokemonList.map((pokemon: Pokemon) => (
@@ -105,7 +105,6 @@ export async function getStaticProps() {
 
   return {
     props: {
-      pokemonList,
       pokemonDataList,
     },
   }
