@@ -16,11 +16,13 @@ import React, { Dispatch, SetStateAction } from "react"
 
 interface Props {
   onFind: () => void
+  onClear: () => void
   setSelectedPokemonType: Dispatch<SetStateAction<string>>
 }
 
 export const FilterModalComponent = ({
   onFind,
+  onClear,
   setSelectedPokemonType,
 }: Props) => {
   let dropDownItems = []
@@ -45,7 +47,9 @@ export const FilterModalComponent = ({
 
   return (
     <div>
-      <Button onPress={onOpen}>Open Modal</Button>
+      <div className="m-5 text-center">
+        <Button onPress={onOpen}>Filter by type</Button>
+      </div>
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
@@ -55,7 +59,7 @@ export const FilterModalComponent = ({
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Find Pokemon Custom Search
+                Find Pokemon by type
               </ModalHeader>
               <ModalBody className="">
                 <Dropdown>
@@ -70,14 +74,19 @@ export const FilterModalComponent = ({
                     disallowEmptySelection
                     selectionMode="single"
                     selectedKeys={selectedKeys}
-                    onSelectionChange={() => setSelectedKeys}
+                    onSelectionChange={setSelectedKeys}
                   >
                     {dropDownItems}
                   </DropdownMenu>
                 </Dropdown>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
+                <Button
+                  color="danger"
+                  variant="light"
+                  onPress={onClear}
+                  onPressEnd={onClose}
+                >
                   Clear
                 </Button>
                 <Button color="primary" onPress={onFind} onPressEnd={onClose}>
