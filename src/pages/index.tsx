@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { SearchbarComponent } from "../components/searchbar/searchbar.component"
 import { Pokemon } from "../domain/pokemon/pokemon.types"
+import { FilterModalComponent } from "../components/filter-modal/filter-modal.component"
 interface PokemonResponse {
   pokemonList: {
     count: number
@@ -20,7 +21,7 @@ export default function Home({ pokemonDataList }: PokemonResponse) {
   const [offset, setOffset] = useState(0)
   const [searchbarInput, setSearchbarInput] = useState("")
   const router = useRouter()
-
+  const [selectedPokemonType, setSelectedPokemonType] = useState("")
   const handleSearchbar = async () => {
     router.push(`/pokemon-detail/${searchbarInput.toLowerCase()}`)
   }
@@ -38,19 +39,26 @@ export default function Home({ pokemonDataList }: PokemonResponse) {
     setOffset(initialPokemonList.length)
   }, [initialPokemonList])
 
+  const handleOnFindModal = () => {
+    const pokemonOfType = pokemonDataList.filter((pokemon) =>
+      pokemon.types.some((type) => type.name === selectedPokemonType)
+    )
+    setInitialPokemonList(pokemonOfType)
+  }
+
   return (
     <Layout title={"Pokemon list"}>
       <SearchbarComponent
         setSearchbarInput={setSearchbarInput}
         onSearch={handleSearchbar}
       />
+      <FilterModalComponent
+        setSelectedPokemonType={setSelectedPokemonType}
+        onFind={handleOnFindModal}
+      />
       <section className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5">
-        {initialPokemonList.map((pokemon: Pokemon, index: number) => (
-          <PokemonCardComponent
-            key={pokemon.name}
-            pokemon={pokemon}
-            index={index}
-          />
+        {initialPokemonList.map((pokemon: Pokemon) => (
+          <PokemonCardComponent key={pokemon.name} pokemon={pokemon} />
         ))}
       </section>
       <div className="text-center mt-5">
@@ -82,6 +90,7 @@ export async function getStaticProps() {
       const pokemonJson = await response.json()
 
       return {
+        id: pokemonJson.id,
         name: pokemonJson.name,
         url: "",
         types: pokemonJson.types.map((item) => {

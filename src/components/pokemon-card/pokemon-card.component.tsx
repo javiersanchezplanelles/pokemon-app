@@ -1,14 +1,18 @@
 import React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { PokemonCard } from "../../domain/pokemon/pokemon-card.types"
-import { PokemonType } from "@/domain/pokemon/pokemon.types"
+import { Pokemon, PokemonType } from "../../domain/pokemon/pokemon.types"
 
-export const PokemonCardComponent = ({ pokemon, index }: PokemonCard) => {
-  const pokemonIndex = ("000" + (index + 1)).slice(-3)
+interface Props {
+  pokemon: Pokemon
+}
+
+export const PokemonCardComponent = ({ pokemon }: Props) => {
+  const pokemonIndex = ("000" + pokemon.id).slice(-3)
+
   const renderTypes = () => {
     return pokemon.types.map((typeInfo: PokemonType) => (
-      <li key={`${pokemonIndex}-${typeInfo.name}`}>{typeInfo.name}</li>
+      <li key={`${pokemon.id}${typeInfo.name}`}>{typeInfo.name}</li>
     ))
   }
 
