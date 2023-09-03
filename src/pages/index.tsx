@@ -83,6 +83,3 @@ export async function getStaticProps(context) {
     },
   }
 }
-
-// more testing
-// add error page
