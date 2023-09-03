@@ -16,6 +16,9 @@ export const PokemonCardComponent = ({ pokemon, index }: PokemonCard) => {
           alt={pokemon.name}
         />
         <div className="text-center">{pokemon.name}</div>
+        <div className="mt-5 text-center font-bold italic">
+          <p>#{pokemonIndex}</p>
+        </div>
       </div>
     </Link>
   )
