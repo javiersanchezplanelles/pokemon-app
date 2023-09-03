@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/router"
 import { SearchbarComponent } from "../components/searchbar/searchbar.component"
 import { Pokemon } from "../domain/pokemon/pokemon.types"
+import { buildNextUrl, getOffsetFromUrl } from "../utils/url"
 
 interface PokemonResponse {
   pokemonList: {
@@ -15,6 +16,9 @@ interface PokemonResponse {
 }
 
 export default function Home({ pokemonList }: PokemonResponse) {
+  const FIRST_POKEMON_GENERATION_COUNT = 151
+  const MAX_PAGE_LIMIT = 20
+  const [offset, setOffset] = useState(getOffsetFromUrl(pokemonList.next))
   const [pokemons, setPokemons] = useState(pokemonList)
   const [searchbarInput, setSearchbarInput] = useState("")
 
@@ -24,13 +28,19 @@ export default function Home({ pokemonList }: PokemonResponse) {
     router.push(`/pokemon-detail/${searchbarInput}`)
   }
 
-  const handleLoadMore = async (url: string, next: boolean) => {
+  const handleLoadMore = async (url: string) => {
     const response = await fetch(url)
     const nextPokemon = await response.json()
-    let updatedPokemonList = pokemons.results.concat(nextPokemon.results)
+    const updatedPokemonList = pokemons.results.concat(nextPokemon.results)
+    const currentOffset = getOffsetFromUrl(nextPokemon.next)
+    setOffset(currentOffset)
+    const pokemonToBeLoadedCount =
+      FIRST_POKEMON_GENERATION_COUNT - currentOffset
+    const currentPageLimit = Math.min(MAX_PAGE_LIMIT, pokemonToBeLoadedCount)
+
     setPokemons({
       ...pokemons,
-      next: nextPokemon.next,
+      next: buildNextUrl(nextPokemon.next, currentPageLimit),
       results: updatedPokemonList,
     })
   }
@@ -50,12 +60,15 @@ export default function Home({ pokemonList }: PokemonResponse) {
           />
         ))}
       </section>
-      <button
-        onClick={() => handleLoadMore(pokemons.next, true)}
-        className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
-      >
-        Load more
-      </button>
+      <div className="text-center mt-5">
+        <button
+          onClick={() => handleLoadMore(pokemons.next)}
+          className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+          disabled={offset >= FIRST_POKEMON_GENERATION_COUNT}
+        >
+          Load more
+        </button>
+      </div>
     </Layout>
   )
 }
@@ -70,3 +83,6 @@ export async function getStaticProps(context) {
     },
   }
 }
+
+// more testing
+// add error page
