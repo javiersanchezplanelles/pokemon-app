@@ -2,5 +2,25 @@ import { Pokemon } from "./pokemon.types"
 
 export interface PokemonCard {
   pokemon: Pokemon
-  index: number
 }
+
+export const PokemonTypesList = [
+  "fire",
+  "water",
+  "grass",
+  "ice",
+  "psychic",
+  "flying",
+  "dark",
+  "steel",
+  "normal",
+  "electric",
+  "fighting",
+  "poison",
+  "ground",
+  "bug",
+  "rock",
+  "ghost",
+  "dragon",
+  "fairy",
+]
