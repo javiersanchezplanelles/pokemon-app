@@ -3,7 +3,7 @@ import { PokemonCardComponent } from "../components/pokemon-card/pokemon-card.co
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { SearchbarComponent } from "../components/searchbar/searchbar.component"
-import { Pokemon } from "../domain/pokemon/pokemon.types"
+import { Pokemon, PokemonTypesList } from "../domain/pokemon/pokemon.types"
 import { FilterModalComponent } from "../components/filter-modal/filter-modal.component"
 interface PokemonResponse {
   pokemonDataList: Pokemon[]
@@ -42,8 +42,7 @@ export default function Home({ pokemonDataList }: PokemonResponse) {
     setInitialPokemonList(pokemonOfType)
   }
 
-  const handleOnClear = () =>
-    setInitialPokemonList(pokemonDataList.slice(0, MAX_PAGE_LIMIT))
+  const handleOnClear = () => setSelectedPokemonType(PokemonTypesList[0].name)
 
   return (
     <Layout title={"Pokemon list"}>
@@ -52,6 +51,7 @@ export default function Home({ pokemonDataList }: PokemonResponse) {
         onSearch={handleSearchbar}
       />
       <FilterModalComponent
+        selectedPokemonType={selectedPokemonType}
         setSelectedPokemonType={setSelectedPokemonType}
         onFind={handleOnFindModal}
         onClear={handleOnClear}
@@ -67,7 +67,7 @@ export default function Home({ pokemonDataList }: PokemonResponse) {
           className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
           disabled={offset >= FIRST_POKEMON_GENERATION_COUNT}
         >
-          Load more
+          More
         </button>
       </div>
     </Layout>
@@ -109,3 +109,6 @@ export async function getStaticProps() {
     },
   }
 }
+
+// uppercase pokemons
+// extract footer and header
