@@ -6,7 +6,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react"
-import React, { Dispatch, SetStateAction } from "react"
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
 
 interface Props {
   setSelectedPokemonType: Dispatch<SetStateAction<string>>
@@ -16,11 +16,13 @@ export const DropdownComponent = ({ setSelectedPokemonType }: Props) => {
   const [selectedKeys, setSelectedKeys] = React.useState(
     new Set([PokemonTypesList[0]])
   )
-  const selectedValue = React.useMemo(() => {
+  const [selectedValue, setSelectedValue] = useState("")
+
+  useEffect(() => {
     setSelectedPokemonType(
       Array.from(selectedKeys).join(", ").replaceAll("_", " ")
     )
-    return Array.from(selectedKeys).join(", ").replaceAll("_", " ")
+    setSelectedValue(Array.from(selectedKeys).join(", ").replaceAll("_", " "))
   }, [selectedKeys, setSelectedPokemonType])
 
   return (
