@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss"
 import { nextui } from "@nextui-org/react"
+import { backgroundColors } from "./src/helpers/colors/background-colors"
 
 const config: Config = {
   content: [
@@ -8,6 +9,7 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
+  safelist: backgroundColors,
   theme: {
     extend: {
       backgroundImage: {
@@ -17,7 +19,6 @@ const config: Config = {
       },
     },
   },
-  darkMode: "class",
   plugins: [nextui()],
 }
 export default config
