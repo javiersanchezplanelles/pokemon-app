@@ -6,7 +6,7 @@ import { SearchbarComponent } from "../components/searchbar/searchbar.component"
 import { Pokemon } from "../domain/pokemon/pokemon.types"
 import { FilterModalComponent } from "../components/filter-modal/filter-modal.component"
 interface PokemonResponse {
-  pokemonDataList: any
+  pokemonDataList: Pokemon[]
 }
 
 export default function Home({ pokemonDataList }: PokemonResponse) {

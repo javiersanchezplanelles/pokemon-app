@@ -6,25 +6,22 @@ describe("Searchbar", () => {
   const setSearchbarInput = jest.fn()
   const onSearch = jest.fn()
 
-  it("should render the bar", () => {
+  beforeEach(() => {
     render(
       <SearchbarComponent
         setSearchbarInput={setSearchbarInput}
         onSearch={onSearch}
       />
     )
+  })
+
+  it("should render the bar", () => {
     const input = screen.getByRole("textbox")
 
     expect(input).toBeInTheDocument()
   })
 
   it("should render the search button", () => {
-    render(
-      <SearchbarComponent
-        setSearchbarInput={setSearchbarInput}
-        onSearch={onSearch}
-      />
-    )
     const searchButton = screen.getByRole("button", {
       name: /search/i,
     })

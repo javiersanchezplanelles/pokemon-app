@@ -39,7 +39,7 @@ export const FilterModalComponent = ({
               <ModalHeader className="flex flex-col gap-1">
                 Find Pokemon by type
               </ModalHeader>
-              <ModalBody className="">
+              <ModalBody>
                 <DropdownComponent
                   setSelectedPokemonType={setSelectedPokemonType}
                 />

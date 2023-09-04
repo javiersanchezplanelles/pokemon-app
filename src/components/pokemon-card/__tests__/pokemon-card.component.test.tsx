@@ -1,14 +1,15 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
 import { PokemonCardComponent } from "../pokemon-card.component"
-import { POKEMON_FIRST_GENERATION } from "../../../helpers/pokemonList"
+import { pokemonList } from "../../../helpers/pokemon"
 
 describe("PokemonCardComponent", () => {
-  const bulbasaurIndex = 0o1
-  const bulbasaur = POKEMON_FIRST_GENERATION[0]
+  beforeEach(() => {
+    render(<PokemonCardComponent pokemon={pokemonList[0]} />)
+    jest.clearAllMocks()
+  })
 
   it("should render an image", () => {
-    render(<PokemonCardComponent pokemon={bulbasaur} index={bulbasaurIndex} />)
     const pokemonCardImage = screen.getByRole("img", {
       name: /bulbasaur/i,
     })
@@ -17,7 +18,6 @@ describe("PokemonCardComponent", () => {
   })
 
   it("should render a name", () => {
-    render(<PokemonCardComponent pokemon={bulbasaur} index={bulbasaurIndex} />)
     const pokemonCardName = screen.getByText(/bulbasaur/i)
 
     expect(pokemonCardName).toBeInTheDocument()

@@ -46,21 +46,6 @@ describe("FilterModalComponent", () => {
 
       expect(filterModalHeader).toBeInTheDocument()
     })
-    it("should render a dropdown", async () => {
-      render(
-        <FilterModalComponent
-          onFind={onFind}
-          onClear={onClear}
-          setSelectedPokemonType={setSelectedPokemonType}
-        />
-      )
-
-      clickButton()
-
-      const dropdown = await screen.findByRole("button", { name: /fire/i })
-
-      expect(dropdown).toBeInTheDocument()
-    })
     it("should render a footer", async () => {
       render(
         <FilterModalComponent

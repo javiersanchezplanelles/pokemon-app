@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react"
 import Home from ".."
-import { POKEMON_FIRST_GENERATION } from "@/helpers/pokemonList"
+import { pokemonList } from "@/helpers/pokemon"
 import userEvent from "@testing-library/user-event"
 import { useRouter } from "next/router"
 
@@ -11,27 +11,18 @@ jest.mock("next/router", () => ({
 const useRouterMock = useRouter as jest.Mock
 
 describe("Header container", () => {
-  const pokemonList = {
-    count: 151,
-    next: "next-url",
-    previous: "",
-    results: POKEMON_FIRST_GENERATION,
-  }
+  beforeEach(() => {
+    render(<Home pokemonDataList={pokemonList} />)
+  })
 
   it("should render the header", () => {
-    render(<Home pokemonList={pokemonList} />)
-
     const header = screen.getByRole("banner")
 
     expect(header).toBeInTheDocument()
   })
 
   it("should render the footer", () => {
-    render(<Home pokemonList={pokemonList} />)
-
     const footer = screen.getByRole("contentinfo")
-
-    const input = screen.getByRole("textbox")
 
     expect(footer).toBeInTheDocument()
   })
@@ -41,7 +32,7 @@ describe("Header container", () => {
     useRouterMock.mockImplementation(() => ({
       pathname: "pokemon-detail/abra",
     }))
-    render(<Home pokemonList={pokemonList} />)
+    render(<Home pokemonDataList={pokemonList} />)
     const input = screen.getByRole("textbox")
 
     userEvent.type(input, "abra")
