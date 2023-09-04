@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react"
 import Home from ".."
-import { pokemonList } from "@/helpers/pokemon"
+import { pokemonList } from "@/helpers/tests/pokemon"
 import userEvent from "@testing-library/user-event"
 import { useRouter } from "next/router"
 

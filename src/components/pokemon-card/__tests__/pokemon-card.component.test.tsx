@@ -1,7 +1,7 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
 import { PokemonCardComponent } from "../pokemon-card.component"
-import { pokemonList } from "../../../helpers/pokemon"
+import { pokemonList } from "../../../helpers/tests/pokemon"
 
 describe("PokemonCardComponent", () => {
   beforeEach(() => {
