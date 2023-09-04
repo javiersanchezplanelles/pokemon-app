@@ -13,17 +13,15 @@ interface Props {
 }
 
 export const DropdownComponent = ({ setSelectedPokemonType }: Props) => {
-  const [selectedKeys, setSelectedKeys] = useState([PokemonTypesList[0]])
+  const [selectedKeys, setSelectedKeys] = React.useState(
+    new Set([PokemonTypesList[0]])
+  )
   const selectedValue = React.useMemo(() => {
-    return Array.from(selectedKeys).join(", ").replaceAll("_", " ")
-  }, [selectedKeys])
-
-  const handleKeys = (evt) => {
-    setSelectedKeys(evt)
     setSelectedPokemonType(
       Array.from(selectedKeys).join(", ").replaceAll("_", " ")
     )
-  }
+    return Array.from(selectedKeys).join(", ").replaceAll("_", " ")
+  }, [selectedKeys, setSelectedPokemonType])
 
   return (
     <Dropdown>
@@ -38,7 +36,7 @@ export const DropdownComponent = ({ setSelectedPokemonType }: Props) => {
         disallowEmptySelection
         selectionMode="single"
         selectedKeys={selectedKeys}
-        onSelectionChange={(evt) => handleKeys(evt)}
+        onSelectionChange={setSelectedKeys}
       >
         {PokemonTypesList.map((pokemonType) => (
           <DropdownItem key={pokemonType} className="text-gray-700">

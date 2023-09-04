@@ -45,12 +45,7 @@ export const FilterModalComponent = ({
                 />
               </ModalBody>
               <ModalFooter>
-                <Button
-                  color="danger"
-                  variant="light"
-                  onPress={onClear}
-                  onPressEnd={onClose}
-                >
+                <Button color="danger" variant="light" onPress={onClear}>
                   Clear
                 </Button>
                 <Button color="primary" onPress={onFind} onPressEnd={onClose}>
