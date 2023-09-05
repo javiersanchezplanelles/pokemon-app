@@ -5,21 +5,23 @@ import { useRouter } from "next/router"
 import { SearchbarComponent } from "../components/searchbar/searchbar.component"
 import { Pokemon, PokemonTypesList } from "../domain/pokemon/pokemon.types"
 import { FilterModalComponent } from "../components/filter-modal/filter-modal.component"
+import { FIRST_POKEMON_GENERATION_COUNT } from "@/domain/pokemon/pokemon.constants"
 
 interface PokemonResponse {
   pokemonDataList: Pokemon[]
+  errorCode?: number
 }
 
-export default function Home({ pokemonDataList }: PokemonResponse) {
-  const FIRST_POKEMON_GENERATION_COUNT = 151
+export default function Home({ pokemonDataList, errorCode }: PokemonResponse) {
   const MAX_PAGE_LIMIT = 20
   const [offset, setOffset] = useState(0)
   const ORIGINAL_POKEMON_LOAD = pokemonDataList.slice(offset, MAX_PAGE_LIMIT)
   const [searchbarInput, setSearchbarInput] = useState("")
   const router = useRouter()
   const [selectedPokemonType, setSelectedPokemonType] = useState("")
-  const handleSearchbar = async () => {
-    router.push(`/pokemon-detail/${searchbarInput.toLowerCase()}`)
+  const handleSearchbar = () => {
+    if (searchbarInput)
+      router.push(`/pokemon-detail/${searchbarInput.toLowerCase()}`)
   }
   const [initialPokemonList, setInitialPokemonList] = useState(
     ORIGINAL_POKEMON_LOAD
@@ -80,8 +82,6 @@ export default function Home({ pokemonDataList }: PokemonResponse) {
 }
 
 export async function getStaticProps() {
-  const FIRST_POKEMON_GENERATION_COUNT = 151
-
   const response = await fetch(
     `https://pokeapi.co/api/v2/pokemon?limit=${FIRST_POKEMON_GENERATION_COUNT}`
   )
