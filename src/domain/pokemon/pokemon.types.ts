@@ -3,6 +3,11 @@ export interface Pokemon {
   name: string
   url: string
   types: PokemonType[]
+  abilities: PokemonAbility[]
+}
+
+interface PokemonAbility {
+  name: string
 }
 
 export type PokemonBase = Omit<Pokemon, "url"> & {

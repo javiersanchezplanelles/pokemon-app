@@ -3,7 +3,11 @@ import Image from "next/image"
 import Layout from "@/components/layout/layout"
 import Link from "next/link"
 import { PokemonBase } from "@/domain/pokemon/pokemon.types"
-import { capitalizePokemonName, getPokemonIndex } from "@/utils/pokemon"
+import {
+  capitalizePokemonName,
+  getPokemonColorType,
+  getPokemonIndex,
+} from "@/utils/pokemon"
 import { Button } from "@nextui-org/react"
 
 interface Props {
@@ -17,17 +21,32 @@ const PokemonDetail = ({ pokemon, errorCode }: Props) => {
 
   const showPokemonTypes = () =>
     pokemon.types.map((type) => (
-      <li key={type.slot} className="px-2 py-1 bg-cyan-700 rounded">
+      <li
+        key={type.slot}
+        className={`${getPokemonColorType(
+          type.name
+        )} px-2 py-1 bg-cyan-700 rounded`}
+      >
         {type.name}
       </li>
     ))
 
   const showPokemonStatsData = () =>
     pokemon.stats.map((stat, index) => (
-      <div key={index} className="my-2 rounded p-1">
-        <div className="rounded px-2" style={{ width: `${stat.base}%` }}>
+      <div key={index} className="my-2 rounded p-1 bg-cyan-700">
+        <div
+          className="rounded px-2 bg-cyan-500"
+          style={{ width: `${stat.base}%` }}
+        >
           {stat.name}: {stat.base}
         </div>
+      </div>
+    ))
+
+  const showPokemonAbilitiesData = () =>
+    pokemon.abilities.map((ability, index) => (
+      <div key={index} className="my-2 rounded p-1">
+        <div className="rounded px-2">{ability.name}</div>
       </div>
     ))
 
@@ -50,7 +69,7 @@ const PokemonDetail = ({ pokemon, errorCode }: Props) => {
       </div>
       <div className="p-10 bg-cyan-950">
         <div className="flex flex-col justify-center items-center">
-          <h2>{capitalizePokemonName(pokemon.name)}</h2>
+          <h2 className={"text-2xl"}>{capitalizePokemonName(pokemon.name)}</h2>
           <Image
             width={200}
             height={200}
@@ -58,28 +77,37 @@ const PokemonDetail = ({ pokemon, errorCode }: Props) => {
             alt={pokemon.name}
           />
         </div>
-        <div className="w-6/12 m-auto">
-          <ul className="flex gap-5">{showPokemonTypes()}</ul>
-          <div className="mt-5">
-            <p className="p-2 bg-slate-500 rounded w-fit">Stats</p>
-            <div>{showPokemonStatsData()}</div>
+        <div className="w-6/12 m-auto text-center">
+          <ul className="flex gap-5 text-center justify-center text-lg">
+            {showPokemonTypes()}
+          </ul>
+          <div className="flex mt-5">
+            <div className="flex-1">
+              <p className="p-2 bg-slate-500 rounded w-fit mx-auto">Stats</p>
+              <div>{showPokemonStatsData()}</div>
+            </div>
+            <div className="flex-1">
+              <p className="p-2 bg-slate-500 rounded w-fit mx-auto">Moves</p>
+              <div>{showPokemonMovementsData()}</div>
+              {displayMovementCount < 5 && (
+                <Button onClick={handleAddMovementClick}>+</Button>
+              )}
+            </div>
           </div>
-          <div>
-            <p className="p-2 bg-slate-500 rounded w-fit">Moves</p>
-            <div>{showPokemonMovementsData()}</div>
-            {displayMovementCount < 5 && (
-              <Button onClick={handleAddMovementClick}>+</Button>
-            )}
+          <div className="mt-5">
+            <p className="p-2 bg-slate-500 rounded w-fit mx-auto">Abilities</p>
+            <div>{showPokemonAbilitiesData()}</div>
           </div>
         </div>
       </div>
     </Layout>
   ) : (
-    <Layout title={"Sorry, no luck"}>
-      <div className={"h-full"}>
-        <p>Sorry, we could not find that pokemon.</p>
-      </div>
-    </Layout>
+    <div className="flex flex-col h-screen justify-center items-center">
+      <p className="text-lg">Sorry, we could not find that pokemon.</p>
+      <p className="mt-2">
+        <Link href="/">Back</Link>
+      </p>
+    </div>
   )
 }
 
@@ -110,6 +138,11 @@ export async function getServerSideProps(context) {
       moves: pokemon.moves.slice(0, 5).map((moveInfo) => {
         return {
           name: moveInfo.move.name,
+        }
+      }),
+      abilities: pokemon.abilities.map((ability) => {
+        return {
+          name: ability.ability.name,
         }
       }),
     }
