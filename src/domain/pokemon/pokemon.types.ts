@@ -7,6 +7,11 @@ export interface Pokemon {
 
 export type PokemonBase = Omit<Pokemon, "url"> & {
   stats: PokemonStats[]
+  moves: PokemonMoves[]
+}
+
+export interface PokemonMoves {
+  name: string
 }
 
 export interface PokemonStats {
