@@ -2,14 +2,14 @@ import React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Pokemon, PokemonType } from "../../domain/pokemon/pokemon.types"
-import { capitalizePokemonName } from "../../utils/pokemon"
+import { capitalizePokemonName, getPokemonIndex } from "../../utils/pokemon"
 
 interface Props {
   pokemon: Pokemon
 }
 
 export const PokemonCardComponent = ({ pokemon }: Props) => {
-  const POKEMON_INDEX = ("000" + pokemon.id).slice(-3)
+  const POKEMON_INDEX = getPokemonIndex(pokemon && pokemon.id)
 
   const renderTypes = () => {
     return pokemon.types.map((typeInfo: PokemonType) => (
