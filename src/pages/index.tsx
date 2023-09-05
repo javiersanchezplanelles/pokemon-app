@@ -114,5 +114,3 @@ export async function getStaticProps() {
     },
   }
 }
-
-// loop through colors
