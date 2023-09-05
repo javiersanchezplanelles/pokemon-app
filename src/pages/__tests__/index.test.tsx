@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react"
+import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import Home from ".."
 import { pokemonList } from "@/helpers/tests/pokemon"
 import userEvent from "@testing-library/user-event"
@@ -11,25 +11,26 @@ jest.mock("next/router", () => ({
 const useRouterMock = useRouter as jest.Mock
 
 describe("Header container", () => {
-  it.skip("should redirect to detail page after using the searchbar", () => {
+  it("should redirect to detail page after using the searchbar", async () => {
     render(<Home pokemonDataList={pokemonList} />)
 
     const push = jest.fn()
     useRouterMock.mockImplementation(() => ({
-      pathname: "pokemon-detail/abra",
+      push,
     }))
-    render(<Home pokemonDataList={pokemonList} />)
 
-    const input = screen.getAllByRole("textbox")[0]
+    const input = screen.getByRole("textbox")
 
-    userEvent.type(input, "abra")
+    fireEvent.change(input, { target: { value: "abra" } })
 
-    const searchButton = screen.getAllByRole("button", {
+    const searchButton = screen.getByRole("button", {
       name: /search/i,
-    })[0]
+    })
 
     userEvent.click(searchButton)
 
-    expect(push).toHaveBeenCalledWith("/pokemon-detail/abra")
+    await waitFor(() =>
+      expect(push).toHaveBeenCalledWith("/pokemon-detail/abra")
+    )
   })
 })
