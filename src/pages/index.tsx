@@ -114,6 +114,4 @@ export async function getStaticProps() {
   }
 }
 
-// uppercase pokemons
-// extract footer and header
-// loop through backgroundColors
+// loop through colors
