@@ -9,10 +9,9 @@ import { FIRST_POKEMON_GENERATION_COUNT } from "@/domain/pokemon/pokemon.constan
 
 interface PokemonResponse {
   pokemonDataList: Pokemon[]
-  errorCode?: number
 }
 
-export default function Home({ pokemonDataList, errorCode }: PokemonResponse) {
+export default function Home({ pokemonDataList }: PokemonResponse) {
   const MAX_PAGE_LIMIT = 20
   const [offset, setOffset] = useState(0)
   const ORIGINAL_POKEMON_LOAD = pokemonDataList.slice(offset, MAX_PAGE_LIMIT)
@@ -52,7 +51,7 @@ export default function Home({ pokemonDataList, errorCode }: PokemonResponse) {
   const handleOnClear = () => setSelectedPokemonType(PokemonTypesList[0].name)
 
   return (
-    <Layout title={"Pokemon list"}>
+    <Layout title={"Pokedex"}>
       <SearchbarComponent
         setSearchbarInput={setSearchbarInput}
         onSearch={handleSearchbar}

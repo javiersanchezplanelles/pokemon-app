@@ -2,7 +2,11 @@ import React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Pokemon, PokemonType } from "../../domain/pokemon/pokemon.types"
-import { capitalizePokemonName, getPokemonIndex } from "../../utils/pokemon"
+import {
+  capitalizePokemonName,
+  getPokemonColorType,
+  getPokemonIndex,
+} from "../../utils/pokemon"
 
 interface Props {
   pokemon: Pokemon
@@ -11,9 +15,16 @@ interface Props {
 export const PokemonCardComponent = ({ pokemon }: Props) => {
   const POKEMON_INDEX = getPokemonIndex(pokemon && pokemon.id)
 
-  const renderTypes = () => {
+  const showPokemonTypes = () => {
     return pokemon.types.map((typeInfo: PokemonType) => (
-      <li key={`${pokemon.id}${typeInfo.name}`}>{typeInfo.name}</li>
+      <li
+        className={`${getPokemonColorType(
+          typeInfo.name
+        )} flex items-center justify-center`}
+        key={`${pokemon.id}${typeInfo.name}`}
+      >
+        {typeInfo.name}
+      </li>
     ))
   }
 
@@ -28,7 +39,7 @@ export const PokemonCardComponent = ({ pokemon }: Props) => {
         />
         <div className="text-center">{capitalizePokemonName(pokemon.name)}</div>
         <div>
-          <ul className="bg-cyan-800 p-1 rounded">{renderTypes()}</ul>
+          <ul className="bg-cyan-800 p-1 rounded">{showPokemonTypes()}</ul>
         </div>
         <div className="mt-5 text-center font-bold italic">
           <p>#{POKEMON_INDEX}</p>

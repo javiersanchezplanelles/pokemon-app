@@ -48,7 +48,7 @@ export const FilterModalComponent = ({
   return (
     <div>
       <div className="m-5 text-center">
-        <Button onPress={onOpen}>Filter by type</Button>
+        <Button onPress={onOpen}>Filter</Button>
       </div>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement={"top"}>
         <ModalContent className={backgroundColor}>
