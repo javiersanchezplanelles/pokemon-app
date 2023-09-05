@@ -5,6 +5,7 @@ import { useRouter } from "next/router"
 import { SearchbarComponent } from "../components/searchbar/searchbar.component"
 import { Pokemon, PokemonTypesList } from "../domain/pokemon/pokemon.types"
 import { FilterModalComponent } from "../components/filter-modal/filter-modal.component"
+
 interface PokemonResponse {
   pokemonDataList: Pokemon[]
 }

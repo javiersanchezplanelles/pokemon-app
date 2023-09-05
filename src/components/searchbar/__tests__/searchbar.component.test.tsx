@@ -2,7 +2,7 @@ import React from "react"
 import { SearchbarComponent } from "../searchbar.component"
 import { render, screen } from "@testing-library/react"
 
-describe("Searchbar", () => {
+describe("SearchbarComponent", () => {
   const setSearchbarInput = jest.fn()
   const onSearch = jest.fn()
 
