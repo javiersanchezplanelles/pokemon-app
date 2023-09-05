@@ -5,7 +5,7 @@ export interface Pokemon {
   types: PokemonType[]
 }
 
-export type PokemonBase = Pick<Pokemon, "id" | "name"> & {
+export type PokemonBase = Omit<Pokemon, "url"> & {
   stats: PokemonStats[]
 }
 

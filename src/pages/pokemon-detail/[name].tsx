@@ -12,6 +12,13 @@ interface Props {
 const PokemonDetail = ({ pokemon }: Props) => {
   const POKEMON_INDEX = ("000" + pokemon.id).slice(-3)
 
+  const showPokemonTypes = () =>
+    pokemon.types.map((type) => (
+      <li key={type.slot} className="px-2 py-1 bg-cyan-700 rounded">
+        {type.name}
+      </li>
+    ))
+
   const showPokemonData = () =>
     pokemon.stats.map((stat, index) => (
       <div key={index} className="my-2 rounded p-1">
@@ -39,6 +46,7 @@ const PokemonDetail = ({ pokemon }: Props) => {
           />
         </div>
         <div className="w-6/12 m-auto">
+          <ul className="flex gap-5">{showPokemonTypes()}</ul>
           <div>{showPokemonData()}</div>
         </div>
       </div>
@@ -57,6 +65,12 @@ export async function getServerSideProps(context) {
   const pokemonData = {
     id: pokemon.id,
     name: pokemon.name,
+    types: pokemon.types.map((pokemonType) => {
+      return {
+        slot: pokemonType.slot,
+        name: pokemonType.type.name,
+      }
+    }),
     stats: pokemon.stats.map((statInfo) => {
       return {
         base: statInfo.base_stat,
