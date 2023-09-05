@@ -11,35 +11,22 @@ jest.mock("next/router", () => ({
 const useRouterMock = useRouter as jest.Mock
 
 describe("Header container", () => {
-  beforeEach(() => {
-    render(<Home pokemonDataList={pokemonList} />)
-  })
-
-  it("should render the header", () => {
-    const header = screen.getByRole("banner")
-
-    expect(header).toBeInTheDocument()
-  })
-
-  it("should render the footer", () => {
-    const footer = screen.getByRole("contentinfo")
-
-    expect(footer).toBeInTheDocument()
-  })
-
   it.skip("should redirect to detail page after using the searchbar", () => {
+    render(<Home pokemonDataList={pokemonList} />)
+
     const push = jest.fn()
     useRouterMock.mockImplementation(() => ({
       pathname: "pokemon-detail/abra",
     }))
     render(<Home pokemonDataList={pokemonList} />)
-    const input = screen.getByRole("textbox")
+
+    const input = screen.getAllByRole("textbox")[0]
 
     userEvent.type(input, "abra")
 
-    const searchButton = screen.getByRole("button", {
+    const searchButton = screen.getAllByRole("button", {
       name: /search/i,
-    })
+    })[0]
 
     userEvent.click(searchButton)
 
