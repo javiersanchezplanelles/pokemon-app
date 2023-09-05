@@ -2,22 +2,20 @@ import React from "react"
 import Image from "next/image"
 import Layout from "@/components/layout/layout"
 import Link from "next/link"
+import { PokemonBase } from "@/domain/pokemon/pokemon.types"
 
-const PokemonDetail = ({ pokemon }) => {
-  const pokemonIndex = ("000" + pokemon.id).slice(-3)
+interface Props {
+  pokemon: PokemonBase
+}
 
-  const showPokemonTypes = () =>
-    pokemon.types.map((type) => (
-      <li key={type.slot} className="px-2 py-1 bg-cyan-700 rounded">
-        {type.type.name}
-      </li>
-    ))
+const PokemonDetail = ({ pokemon }: Props) => {
+  const POKEMON_INDEX = ("000" + pokemon.id).slice(-3)
 
   const showPokemonData = () =>
     pokemon.stats.map((stat, index) => (
       <div key={index} className="my-2 rounded p-1">
-        <div className="rounded px-2" style={{ width: `${stat.base_stat}%` }}>
-          {stat.stat.name}: {stat.base_stat}
+        <div className="rounded px-2" style={{ width: `${stat.base}%` }}>
+          {stat.name}: {stat.base}
         </div>
       </div>
     ))
@@ -35,13 +33,11 @@ const PokemonDetail = ({ pokemon }) => {
           <Image
             width={200}
             height={200}
-            src={`https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${pokemonIndex}.png`}
+            src={`https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${POKEMON_INDEX}.png`}
             alt={pokemon.name}
           />
         </div>
-        <div className="bg-slate-900 w-6/12 m-auto">
-          <ul className="flex gap-5">{showPokemonTypes()}</ul>
-
+        <div className="w-6/12 m-auto">
           <div>{showPokemonData()}</div>
         </div>
       </div>
@@ -56,9 +52,21 @@ export async function getServerSideProps(context) {
     `https://pokeapi.co/api/v2/pokemon/${context.query.name}`
   )
   const pokemon = await response.json()
+
+  const pokemonData = {
+    id: pokemon.id,
+    name: pokemon.name,
+    stats: pokemon.stats.map((statInfo) => {
+      return {
+        base: statInfo.base_stat,
+        name: statInfo.stat.name,
+      }
+    }),
+  }
+
   return {
     props: {
-      pokemon,
+      pokemon: pokemonData,
     },
   }
 }
