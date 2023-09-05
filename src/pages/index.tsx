@@ -39,7 +39,11 @@ export default function Home({ pokemonDataList }: PokemonResponse) {
     const pokemonOfType = pokemonDataList.filter((pokemon: Pokemon) =>
       pokemon.types.some((type) => type.name === selectedPokemonType)
     )
-    setInitialPokemonList(pokemonOfType)
+    if (selectedPokemonType === PokemonTypesList[0].name) {
+      setInitialPokemonList(pokemonDataList.slice(0, MAX_PAGE_LIMIT))
+    } else {
+      setInitialPokemonList(pokemonOfType)
+    }
   }
 
   const handleOnClear = () => setSelectedPokemonType(PokemonTypesList[0].name)
@@ -112,3 +116,4 @@ export async function getStaticProps() {
 
 // uppercase pokemons
 // extract footer and header
+// loop through backgroundColors
