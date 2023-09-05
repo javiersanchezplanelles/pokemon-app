@@ -5,6 +5,15 @@ export interface Pokemon {
   types: PokemonType[]
 }
 
+export type PokemonBase = Pick<Pokemon, "id" | "name"> & {
+  stats: PokemonStats[]
+}
+
+export interface PokemonStats {
+  name: string
+  base: number
+}
+
 export interface PokemonType {
   slot: number
   name: string
