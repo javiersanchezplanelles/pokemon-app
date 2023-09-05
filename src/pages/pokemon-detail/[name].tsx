@@ -1,16 +1,19 @@
-import React from "react"
+import React, { useState } from "react"
 import Image from "next/image"
 import Layout from "@/components/layout/layout"
 import Link from "next/link"
 import { PokemonBase } from "@/domain/pokemon/pokemon.types"
-import { capitalizePokemonName } from "@/utils/pokemon"
+import { capitalizePokemonName, getPokemonIndex } from "@/utils/pokemon"
+import { Button } from "@nextui-org/react"
 
 interface Props {
   pokemon: PokemonBase
+  errorCode: number
 }
 
-const PokemonDetail = ({ pokemon }: Props) => {
-  const POKEMON_INDEX = ("000" + pokemon.id).slice(-3)
+const PokemonDetail = ({ pokemon, errorCode }: Props) => {
+  const [displayMovementCount, setDisplayMovementCount] = useState(1)
+  const POKEMON_INDEX = getPokemonIndex(pokemon && pokemon.id)
 
   const showPokemonTypes = () =>
     pokemon.types.map((type) => (
@@ -19,7 +22,7 @@ const PokemonDetail = ({ pokemon }: Props) => {
       </li>
     ))
 
-  const showPokemonData = () =>
+  const showPokemonStatsData = () =>
     pokemon.stats.map((stat, index) => (
       <div key={index} className="my-2 rounded p-1">
         <div className="rounded px-2" style={{ width: `${stat.base}%` }}>
@@ -28,7 +31,17 @@ const PokemonDetail = ({ pokemon }: Props) => {
       </div>
     ))
 
-  return (
+  const showPokemonMovementsData = () =>
+    pokemon.moves.slice(0, displayMovementCount).map((move, index) => (
+      <div key={index} className="my-2 rounded p-1">
+        <div className="rounded px-2">{move.name}</div>
+      </div>
+    ))
+
+  const handleAddMovementClick = () =>
+    setDisplayMovementCount((prevCount) => prevCount + 1)
+
+  return errorCode === undefined ? (
     <Layout title={capitalizePokemonName(pokemon.name)}>
       <div>
         <Link className="pb-10 font-medium" href="/">
@@ -47,8 +60,24 @@ const PokemonDetail = ({ pokemon }: Props) => {
         </div>
         <div className="w-6/12 m-auto">
           <ul className="flex gap-5">{showPokemonTypes()}</ul>
-          <div>{showPokemonData()}</div>
+          <div className="mt-5">
+            <p className="p-2 bg-slate-500 rounded w-fit">Stats</p>
+            <div>{showPokemonStatsData()}</div>
+          </div>
+          <div>
+            <p className="p-2 bg-slate-500 rounded w-fit">Moves</p>
+            <div>{showPokemonMovementsData()}</div>
+            {displayMovementCount < 5 && (
+              <Button onClick={handleAddMovementClick}>+</Button>
+            )}
+          </div>
         </div>
+      </div>
+    </Layout>
+  ) : (
+    <Layout title={"Sorry, no luck"}>
+      <div className={"h-full"}>
+        <p>Sorry, we could not find that pokemon.</p>
       </div>
     </Layout>
   )
@@ -57,31 +86,44 @@ const PokemonDetail = ({ pokemon }: Props) => {
 export default PokemonDetail
 
 export async function getServerSideProps(context) {
-  const response = await fetch(
-    `https://pokeapi.co/api/v2/pokemon/${context.query.name}`
-  )
-  const pokemon = await response.json()
+  try {
+    const response = await fetch(
+      `https://pokeapi.co/api/v2/pokemon/${context.query.name}`
+    )
+    const pokemon = await response.json()
 
-  const pokemonData = {
-    id: pokemon.id,
-    name: pokemon.name,
-    types: pokemon.types.map((pokemonType) => {
-      return {
-        slot: pokemonType.slot,
-        name: pokemonType.type.name,
-      }
-    }),
-    stats: pokemon.stats.map((statInfo) => {
-      return {
-        base: statInfo.base_stat,
-        name: statInfo.stat.name,
-      }
-    }),
-  }
+    const pokemonData = {
+      id: pokemon.id,
+      name: pokemon.name,
+      types: pokemon.types.map((pokemonType) => {
+        return {
+          slot: pokemonType.slot,
+          name: pokemonType.type.name,
+        }
+      }),
+      stats: pokemon.stats.map((statInfo) => {
+        return {
+          base: statInfo.base_stat,
+          name: statInfo.stat.name,
+        }
+      }),
+      moves: pokemon.moves.slice(0, 5).map((moveInfo) => {
+        return {
+          name: moveInfo.move.name,
+        }
+      }),
+    }
 
-  return {
-    props: {
-      pokemon: pokemonData,
-    },
+    return {
+      props: {
+        pokemon: pokemonData,
+      },
+    }
+  } catch (err) {
+    return {
+      props: {
+        errorCode: 500 | 404,
+      },
+    }
   }
 }
