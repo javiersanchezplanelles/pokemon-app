@@ -2,6 +2,7 @@ import React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Pokemon, PokemonType } from "../../domain/pokemon/pokemon.types"
+import { capitalizePokemonName } from "../../utils/pokemon"
 
 interface Props {
   pokemon: Pokemon
@@ -25,7 +26,7 @@ export const PokemonCardComponent = ({ pokemon }: Props) => {
           src={`https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${POKEMON_INDEX}.png`}
           alt={pokemon.name}
         />
-        <div className="text-center">{pokemon.name}</div>
+        <div className="text-center">{capitalizePokemonName(pokemon.name)}</div>
         <div>
           <ul className="bg-cyan-800 p-1 rounded">{renderTypes()}</ul>
         </div>

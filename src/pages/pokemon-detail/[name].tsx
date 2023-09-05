@@ -3,6 +3,7 @@ import Image from "next/image"
 import Layout from "@/components/layout/layout"
 import Link from "next/link"
 import { PokemonBase } from "@/domain/pokemon/pokemon.types"
+import { capitalizePokemonName } from "@/utils/pokemon"
 
 interface Props {
   pokemon: PokemonBase
@@ -21,7 +22,7 @@ const PokemonDetail = ({ pokemon }: Props) => {
     ))
 
   return (
-    <Layout title={pokemon.name}>
+    <Layout title={capitalizePokemonName(pokemon.name)}>
       <div>
         <Link className="pb-10 font-medium" href="/">
           Back
@@ -29,7 +30,7 @@ const PokemonDetail = ({ pokemon }: Props) => {
       </div>
       <div className="p-10 bg-cyan-950">
         <div className="flex flex-col justify-center items-center">
-          <h2>{pokemon.name}</h2>
+          <h2>{capitalizePokemonName(pokemon.name)}</h2>
           <Image
             width={200}
             height={200}
