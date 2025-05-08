@@ -77,7 +77,7 @@ const PokemonDetail = ({ pokemon, errorCode }: Props) => {
             alt={pokemon.name}
           />
         </div>
-        <div className="w-6/12 m-auto text-center">
+        <div className="md:w-6/12 m-auto text-center">
           <ul className="flex gap-5 text-center justify-center text-lg">
             {showPokemonTypes()}
           </ul>
